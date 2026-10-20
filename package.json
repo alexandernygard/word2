@@ -6,10 +6,12 @@
     "dev": "pnpm --filter @word2/web dev",
     "build": "pnpm --filter @word2/web build",
     "test": "vitest run",
+    "deploy": "pnpm build && wrangler deploy",
     "typecheck": "tsc -p packages/sdk && tsc -p packages/react && tsc -p apps/web"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
-    "vitest": "^5.0.5"
+    "vitest": "^5.0.5",
+    "wrangler": "^4.151.2"
   }
 }
