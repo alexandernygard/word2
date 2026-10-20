@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@import "@alexandernygard/components/theme.css";
+@import "@word2/react/styles.css";
+
+@source "../../../packages/react/src";
+
+html, body, #root { height: 100%; }
+body { background: var(--background); color: var(--foreground); overflow: hidden; }
+
+:root {
+  --cm-heading: var(--foreground);
+  --cm-link: #2f6fb0;
+  --cm-code: #8a4b08;
+  --cm-muted: color-mix(in oklab, var(--foreground) 50%, transparent);
+  --cm-gutter: color-mix(in oklab, var(--foreground) 30%, transparent);
+}
+.dark {
+  --cm-link: #7fb2e5;
+  --cm-code: #e3b26b;
+}
+.w2-code-view .cm-w2-ins { color: #137333; background: color-mix(in oklab, #34a853 14%, transparent); }
+.w2-code-view .cm-w2-del { color: #b3261e; background: color-mix(in oklab, #d93025 12%, transparent); }
+.w2-code-view .cm-w2-sub { color: #8a5a00; background: color-mix(in oklab, #f2a922 16%, transparent); }
+.w2-code-view .cm-w2-hl { background: color-mix(in oklab, #f2a922 22%, transparent); }
+.w2-code-view .cm-w2-comment { color: #8a5a00; font-style: italic; }
+.w2-code-view .cm-w2-directive { color: #7c3aed; font-weight: 500; }
+.w2-code-view .cm-w2-ref { color: #0e7490; }
+.w2-code-view .cm-w2-linked { background: color-mix(in oklab, var(--highlight) 13%, transparent); box-shadow: inset 2px 0 0 var(--highlight); }
+.dark .w2-code-view .cm-w2-ins { color: #81c995; }
+.dark .w2-code-view .cm-w2-del { color: #f28b82; }
+.dark .w2-code-view .cm-w2-sub, .dark .w2-code-view .cm-w2-comment { color: #fdd663; }
+.dark .w2-code-view .cm-w2-directive { color: #c4b5fd; }
+.dark .w2-code-view .cm-w2-ref { color: #67e8f9; }
+
+.w2-desk { background: var(--w2-desk-bg, #e8ecef); }
+.dark .w2-desk { --w2-desk-bg: #10151b; }
+
+/* print: only the print root */
+/* laid out off-screen (so pagination can measure), shown only when printing */
+#print-root { position: fixed; left: -100000px; top: 0; width: max-content; }
+@media print {
+  html, body { overflow: visible !important; height: auto !important; background: white; }
+  #root { display: none !important; }
+  #print-root { position: static; }
+}

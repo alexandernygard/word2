@@ -1,0 +1,9 @@
+packages:
+  - packages/*
+  - apps/*
+minimumReleaseAgeExclude:
+  - '@alexandernygard/*'
+  - '@codemirror/view@6.43.15'
+overrides:
+  '@codemirror/view': 6.43.15
+  '@codemirror/state': 6.7.6

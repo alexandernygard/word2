@@ -1,0 +1,15 @@
+{
+  "name": "word2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @word2/web dev",
+    "build": "pnpm --filter @word2/web build",
+    "test": "vitest run",
+    "typecheck": "tsc -p packages/sdk && tsc -p packages/react && tsc -p apps/web"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}
