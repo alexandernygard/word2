@@ -22,7 +22,6 @@ import {
   type SourceCache,
 } from "@word2/sdk"
 import { create } from "zustand"
-import { WELCOME } from "./sample"
 
 /** "remote": a collaborator's edit, arriving through the shared document (see lib/collab.ts). */
 export type Origin = "init" | "code" | "editor" | "ai" | "ui" | "remote"
@@ -116,12 +115,15 @@ function load<T>(key: string, fallback: T): T {
   }
 }
 
+export const BLANK_DOCUMENT = `---\ntitle: Untitled document\ntheme: classic\nfooter: " | Page {{page}} of {{pages}} | "\n---\n\n`
+
+/** A new tab starts on an empty document; a reload keeps what this tab had. Documents to keep go to Drive. */
 function loadSource(): string {
   if (fromDrive) return ""
   try {
-    return localStorage.getItem(LS_SOURCE) ?? WELCOME
+    return sessionStorage.getItem(LS_SOURCE) ?? BLANK_DOCUMENT
   } catch {
-    return WELCOME
+    return BLANK_DOCUMENT
   }
 }
 
@@ -231,14 +233,14 @@ export const useStore = create<State>((set, get) => ({
   },
 }))
 
-// persist the source (debounced)
+// keep the source for reloads of this tab (debounced)
 let saveTimer: ReturnType<typeof setTimeout> | undefined
 useStore.subscribe((s, p) => {
   if (s.source === p.source || fromDrive) return
   clearTimeout(saveTimer)
   saveTimer = setTimeout(() => {
     try {
-      localStorage.setItem(LS_SOURCE, s.source)
+      sessionStorage.setItem(LS_SOURCE, s.source)
     } catch {
       /* ignore */
     }

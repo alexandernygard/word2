@@ -1,5 +1,5 @@
 import { newId, serialize, type ChartSpec, type Document } from "@word2/sdk"
-import { useStore } from "../store"
+import { BLANK_DOCUMENT, useStore } from "../store"
 import { useEditorRef } from "./editor"
 
 const ed = () => useEditorRef.getState().editor
@@ -70,5 +70,5 @@ export async function openFile(file: File) {
 }
 
 export function newDocument() {
-  useStore.getState().setSource(`---\ntitle: Untitled document\ntheme: classic\nfooter: " | Page {{page}} of {{pages}} | "\n---\n\n`, "ui")
+  useStore.getState().setSource(BLANK_DOCUMENT, "ui")
 }
