@@ -2,7 +2,7 @@
 @import "@alexandernygard/components/theme.css";
 @import "@word2/react/styles.css";
 /* The share dialog and avatars from Drive. */
-@source "../node_modules/@alexandernygard/drive/src";
+@source "../node_modules/@alexandernygard/drive/dist";
 
 @source "../../../packages/react/src";
 
