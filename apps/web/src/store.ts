@@ -24,7 +24,11 @@ import {
 import { create } from "zustand"
 import { WELCOME } from "./sample"
 
-export type Origin = "init" | "code" | "editor" | "ai" | "ui"
+/** "remote": a collaborator's edit, arriving through the shared document (see lib/collab.ts). */
+export type Origin = "init" | "code" | "editor" | "ai" | "ui" | "remote"
+
+/** Opened from Drive (`?file=<id>`): the document lives in the drive's room, not in localStorage. */
+const fromDrive = typeof location !== "undefined" && new URLSearchParams(location.search).has("file")
 export type ViewMode = "split" | "doc" | "code"
 
 export type ChatItem =
@@ -113,6 +117,7 @@ function load<T>(key: string, fallback: T): T {
 }
 
 function loadSource(): string {
+  if (fromDrive) return ""
   try {
     return localStorage.getItem(LS_SOURCE) ?? WELCOME
   } catch {
@@ -229,7 +234,7 @@ export const useStore = create<State>((set, get) => ({
 // persist the source (debounced)
 let saveTimer: ReturnType<typeof setTimeout> | undefined
 useStore.subscribe((s, p) => {
-  if (s.source === p.source) return
+  if (s.source === p.source || fromDrive) return
   clearTimeout(saveTimer)
   saveTimer = setTimeout(() => {
     try {

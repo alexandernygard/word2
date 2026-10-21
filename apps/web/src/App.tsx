@@ -8,15 +8,20 @@ import { PromptDialog } from "./components/PromptDialog"
 import { ReviewPanel } from "./components/ReviewPanel"
 import { RightPanel } from "./components/RightPanel"
 import { TopBar } from "./components/TopBar"
+import { useEffect } from "react"
+import { DriveNotice } from "./components/DriveNotice"
+import { driveFileId, startCollab } from "./lib/collab"
 import { useStore } from "./store"
 
 export function App() {
+  useEffect(() => (driveFileId ? startCollab(driveFileId) : undefined), [])
   const view = useStore((s) => s.view)
   const leftOpen = useStore((s) => s.leftOpen)
   const rightOpen = useStore((s) => s.rightOpen)
   return (
     <div className="flex h-full flex-col">
       <TopBar />
+      <DriveNotice />
       <div className="flex min-h-0 flex-1">
         {leftOpen && (
           <aside className="hidden w-60 shrink-0 border-r bg-background md:block">

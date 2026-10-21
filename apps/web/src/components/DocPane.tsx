@@ -80,7 +80,7 @@ export function DocPane() {
                 doc={doc}
                 onChange={onChange}
                 mode={layout}
-                undoableSync={origin !== "code"}
+                undoableSync={origin !== "code" && origin !== "remote"}
                 activeBlockId={activeFrom === "code" ? activeBlockId : null}
                 followActive={activeFrom === "code"}
                 onSelectionChange={(sel) => {

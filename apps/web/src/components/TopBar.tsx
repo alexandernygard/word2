@@ -35,6 +35,8 @@ import { useMemo, useRef, useState } from "react"
 import { exportCleanMarkdown, exportDocxFile, exportSource, newDocument, openFile } from "../lib/actions"
 import { WELCOME } from "../sample"
 import { useStore } from "../store"
+import { DriveFileButton, DriveLogo } from "@alexandernygard/drive/react"
+import { drive, driveFileId, newDriveDocument, saveToDrive, useCollab } from "../lib/collab"
 import { PageSetupDialog } from "./PageSetupDialog"
 import { printDocument } from "./PrintPortal"
 
@@ -58,6 +60,9 @@ export function TopBar() {
   const fileRef = useRef<HTMLInputElement>(null)
   const [setupOpen, setSetupOpen] = useState(false)
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"))
+  const driveItem = useCollab((s) => s.item)
+  const peers = useCollab((s) => s.peers)
+  const live = useCollab((s) => s.status)
 
   const toggleDark = () => {
     const next = !dark
@@ -84,7 +89,13 @@ export function TopBar() {
         placeholder="Untitled document"
         aria-label="Document title"
         className="h-8 min-w-0 max-w-[22rem] flex-1 truncate rounded-md bg-transparent px-2 text-sm font-medium outline-none hover:bg-muted focus:bg-muted"
-        onBlur={(e) => e.target.value !== (doc.meta.title ?? "") && useStore.getState().updateMeta({ title: e.target.value })}
+        onBlur={(e) => {
+          const title = e.target.value
+          if (title === (doc.meta.title ?? "")) return
+          useStore.getState().updateMeta({ title })
+          // In Drive, the title is also the file's name.
+          if (driveFileId && title.trim()) void drive.update(driveFileId, { name: title.trim() }).then((item) => useCollab.setState({ item }), () => {})
+        }}
         onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
       />
       <span className="hidden text-xs whitespace-nowrap text-muted-foreground lg:inline">{words.toLocaleString()} words</span>
@@ -144,7 +155,13 @@ export function TopBar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuItem onSelect={() => newDocument()}>
+            <DropdownMenuItem
+              onSelect={() =>
+                driveFileId
+                  ? void newDriveDocument().catch((e) => toast.error("Couldn't create the document", { description: String(e?.message ?? e) }))
+                  : newDocument()
+              }
+            >
               <FileIcon /> New document
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => fileRef.current?.click()}>
@@ -187,6 +204,27 @@ export function TopBar() {
             e.target.value = ""
           }}
         />
+        <Separator orientation="vertical" className="h-5" />
+        {driveFileId ? (
+          <>
+            {live !== "live" && live !== "off" && <span className="text-xs text-muted-foreground">{live === "connecting" ? "Connecting…" : live === "offline" ? "Offline" : ""}</span>}
+            <DriveFileButton fileId={driveFileId} item={driveItem} peers={peers.map((p) => p.state.user)} onItemChange={(item) => useCollab.setState({ item })} />
+          </>
+        ) : (
+          <Tip label="Save to Drive to share it with people and edit together">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                saveToDrive().catch((e) =>
+                  e?.signedOut ? (location.href = drive.loginUrl()) : toast.error("Couldn't save to Drive", { description: String(e?.message ?? e) }),
+                )
+              }
+            >
+              <DriveLogo size={16} /> Save to Drive
+            </Button>
+          </Tip>
+        )}
         <Tip label={dark ? "Light mode" : "Dark mode"}>
           <Button variant="ghost" size="icon-sm" onClick={toggleDark} aria-label="Toggle dark mode">
             {dark ? <SunIcon /> : <MoonIcon />}

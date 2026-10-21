@@ -11,6 +11,9 @@ pnpm build      # static bundle in apps/web/dist
 
 Paste an Anthropic API key in the Claude panel (kept in localStorage, sent only to api.anthropic.com).
 
+### Drive and live collaboration
+
+Documents in [Drive](../drive) (drive.nyggis.com) open here as `/?file=<id>`. The source syncs live through the drive's room (`@alexandernygard/collab`, one Y.Text), so several people can edit at once, and sharing follows Drive: people you add by email, as viewers or editors, with Nyggis accounts. A Drive document isn't kept in localStorage; the local document stays as it was. *Save to Drive* in the top bar copies the local document there and reopens it from Drive. Each view keeps its own undo history, and edits from others don't go on it. Locally, run the drive (`pnpm dev:worker` in `../drive`) and the auth Worker (:8787).
 ## Packages
 
 | Package | What it is |
