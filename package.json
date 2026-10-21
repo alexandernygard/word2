@@ -2,6 +2,7 @@
   "name": "word2",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.14.0",
   "scripts": {
     "dev": "pnpm --filter @word2/web dev",
     "build": "pnpm --filter @word2/web build",
