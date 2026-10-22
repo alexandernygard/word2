@@ -13,7 +13,7 @@ function Endnotes() {
   const ctx = useMemo(() => createRenderContext(doc), [doc])
   if (!notes.length) return null
   return (
-    <div className="w2-doc mx-auto -mt-16 mb-16 max-w-[760px] rounded-b-[14px] bg-white px-16 pb-10 text-[0.85em]" style={{ fontFamily: "var(--w2-body-font)" }}>
+    <div className="w2-doc mx-2 -mt-16 mb-16 max-w-[760px] rounded-b-[14px] bg-white px-5 pb-10 text-[0.85em] sm:mx-auto sm:px-16" style={{ fontFamily: "var(--w2-body-font)" }}>
       <hr className="mb-3 border-t" />
       {notes.map((n, i) => (
         <div key={i} className="w2-footnote">

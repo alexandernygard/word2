@@ -12,7 +12,7 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@alexandernygard/components": "0.1.4",
+    "@alexandernygard/components": "^0.3.0",
     "@tiptap/core": "3.32.0",
     "@tiptap/extension-highlight": "3.32.0",
     "@tiptap/extension-list": "3.32.0",

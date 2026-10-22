@@ -130,6 +130,8 @@ function loadSource(): string {
 const initialSource = loadSource()
 const initial = parse(initialSource)
 
+const narrow = (px: number) => typeof window !== "undefined" && window.innerWidth < px
+
 export const useStore = create<State>((set, get) => ({
   source: initialSource,
   doc: initial.doc,
@@ -144,12 +146,14 @@ export const useStore = create<State>((set, get) => ({
   activeFrom: null,
   selection: null,
 
-  view: "split",
-  layout: "print",
+  // Narrower than a laptop the document starts alone; a phone also starts in web layout,
+  // since a whole page fitted to its width is too small to read.
+  view: narrow(1024) ? "doc" : "split",
+  layout: narrow(768) ? "web" : "print",
   zoom: 0,
   reading: false,
-  leftOpen: true,
-  rightOpen: true,
+  leftOpen: !narrow(1024),
+  rightOpen: !narrow(1024),
   rightTab: "assistant",
   page: { current: 1, total: 1 },
   pageOf: new Map(),

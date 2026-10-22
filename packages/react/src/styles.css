@@ -202,6 +202,12 @@
 .w2-view .w2-sheet-body > :last-child { margin-bottom: 0; }
 .w2-view .w2-pagebreak { display: none; }
 .w2-view.w2-web .w2-web-article { max-width: 760px; margin: 32px auto; padding: 56px 64px; background: var(--w2-paper); border-radius: 14px; }
+/* a phone has no room for desk around the paper */
+@media (max-width: 640px) {
+  .w2-editor.w2-web { padding: 8px 8px 64px; }
+  .w2-editor.w2-web .ProseMirror { padding: 24px 20px; border-radius: 10px; }
+  .w2-view.w2-web .w2-web-article { margin: 8px; padding: 24px 20px; border-radius: 10px; }
+}
 .w2-view ul[data-type="taskList"] li > input { margin-top: 0.4em; }
 
 @media print {
